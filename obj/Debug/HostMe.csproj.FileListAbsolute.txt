@@ -1,0 +1,15 @@
+D:\Important Data\Programming Projects C#\HostMe\bin\Debug\HostMe.exe.config
+D:\Important Data\Programming Projects C#\HostMe\bin\Debug\HostMe.exe
+D:\Important Data\Programming Projects C#\HostMe\bin\Debug\HostMe.pdb
+D:\Important Data\Programming Projects C#\HostMe\obj\Debug\HostMe.csproj.AssemblyReference.cache
+D:\Important Data\Programming Projects C#\HostMe\obj\Debug\HostMe.csproj.CoreCompileInputs.cache
+D:\Important Data\Programming Projects C#\HostMe\obj\Debug\HostMe.exe
+D:\Important Data\Programming Projects C#\HostMe\obj\Debug\HostMe.pdb
+D:\Coding\C#\HostMe\bin\Debug\index.html
+D:\Coding\C#\HostMe\bin\Debug\HostMe.exe.config
+D:\Coding\C#\HostMe\bin\Debug\HostMe.exe
+D:\Coding\C#\HostMe\bin\Debug\HostMe.pdb
+D:\Coding\C#\HostMe\obj\Debug\HostMe.csproj.AssemblyReference.cache
+D:\Coding\C#\HostMe\obj\Debug\HostMe.csproj.CoreCompileInputs.cache
+D:\Coding\C#\HostMe\obj\Debug\HostMe.exe
+D:\Coding\C#\HostMe\obj\Debug\HostMe.pdb
