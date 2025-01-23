@@ -41,7 +41,7 @@ namespace HostMe
                 listener.Start();
 
                 // Try to launch index.html but if it doesn't exist use a random html file and if there are none then give up.
-                if (File.Exists(Root + "/index.html"))
+                if (File.Exists(Path.Combine(Root + "index.html")))
                 {
                     Process.Start(URL);
                 }
@@ -50,7 +50,7 @@ namespace HostMe
                     string[] htmlFiles = Directory.GetFiles(Root, "*.html");
                     if (htmlFiles != null && htmlFiles.Length > 0)
                     {
-                        Process.Start(URL + htmlFiles[0].Substring(Root.Length));
+                        Process.Start(URL + Path.GetFileName(htmlFiles[0]));
                     }
                 }
 
@@ -94,12 +94,21 @@ namespace HostMe
             Console.ForegroundColor = ConsoleColor.White;
             Console.WriteLine($"Got request for url \"{requestUrl}\"");
 
-            if (requestUrl == "" || requestUrl == null || requestUrl == "/" || requestUrl == "\\")
+            if (requestUrl.Contains("/../") || requestUrl.Contains("/./") || requestUrl.Contains("\\"))
             {
-                requestUrl = "/index.html";
+                context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                context.Response.Close();
+                return;
             }
-            string filePath = Root + requestUrl;
-
+            if (requestUrl == "" || requestUrl == null || requestUrl == "/")
+            {
+                requestUrl = "index.html";
+            }
+            if (requestUrl.StartsWith("/"))
+            {
+                requestUrl = requestUrl.Substring(1);
+            }
+            string filePath = Path.Combine(Root, requestUrl.Replace("/", "\\"));
             if (File.Exists(filePath))
             {
                 byte[] fileBytes = File.ReadAllBytes(filePath);
@@ -122,7 +131,6 @@ namespace HostMe
 
                 Console.WriteLine($"Unable to server file \"{filePath}\" because it does not exist.");
             }
-
             context.Response.Close();
 
             Console.WriteLine();
