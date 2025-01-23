@@ -15,70 +15,68 @@ namespace HostMe
         [STAThread]
         public static void Main(string[] args)
         {
-            // try
-            // {
-            Root = Environment.CurrentDirectory;
-
-            // Try port 8000 and if it's not availible use a random port.
             try
             {
-                TcpListener tcpListener = new TcpListener(IPAddress.Any, 8000);
-                tcpListener.Start();
-                Port = ((IPEndPoint)tcpListener.LocalEndpoint).Port;
-                tcpListener.Stop();
-            }
-            catch
-            {
-                TcpListener tcpListener = new TcpListener(IPAddress.Any, 0);
-                tcpListener.Start();
-                Port = ((IPEndPoint)tcpListener.LocalEndpoint).Port;
-                tcpListener.Stop();
-            }
+                Root = Environment.CurrentDirectory;
 
-            URL = $"http://localhost:{Port}/";
-            HttpListener listener = new HttpListener();
-            listener.Prefixes.Add($"http://localhost:{Port}/");
-            listener.Prefixes.Add($"http://127.69.69.69/");
-            listener.Start();
-
-            // Try to launch index.html but if it doesn't exist use a random html file and if there are none then give up.
-            if (File.Exists(Root + "/index.html"))
-            {
-                Process.Start(URL);
-            }
-            else
-            {
-                string[] htmlFiles = Directory.GetFiles(Root, "*.html");
-                if (htmlFiles != null && htmlFiles.Length > 0)
-                {
-                    Process.Start(URL + htmlFiles[0].Substring(Root.Length));
-                }
-            }
-
-            Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine($"Hosting \"{Root}\" at \"{URL}\".");
-            Console.WriteLine();
-
-            while (true)
-            {
+                // Try port 8000 and if it's not availible use a random port.
                 try
                 {
-                    HttpListenerContext context = listener.GetContext();
-                    ProcessRequest(context);
+                    TcpListener tcpListener = new TcpListener(IPAddress.Any, 8000);
+                    tcpListener.Start();
+                    Port = ((IPEndPoint)tcpListener.LocalEndpoint).Port;
+                    tcpListener.Stop();
                 }
-                catch (Exception ex)
+                catch
                 {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine($"Error: \"{ex.Message}\".");
+                    TcpListener tcpListener = new TcpListener(IPAddress.Any, 0);
+                    tcpListener.Start();
+                    Port = ((IPEndPoint)tcpListener.LocalEndpoint).Port;
+                    tcpListener.Stop();
+                }
+
+                URL = $"http://localhost:{Port}/";
+                HttpListener listener = new HttpListener();
+                listener.Prefixes.Add(URL);
+                listener.Start();
+
+                // Try to launch index.html but if it doesn't exist use a random html file and if there are none then give up.
+                if (File.Exists(Root + "/index.html"))
+                {
+                    Process.Start(URL);
+                }
+                else
+                {
+                    string[] htmlFiles = Directory.GetFiles(Root, "*.html");
+                    if (htmlFiles != null && htmlFiles.Length > 0)
+                    {
+                        Process.Start(URL + htmlFiles[0].Substring(Root.Length));
+                    }
+                }
+
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.WriteLine($"Hosting \"{Root}\" at \"{URL}\".");
+                Console.WriteLine();
+
+                while (true)
+                {
+                    try
+                    {
+                        HttpListenerContext context = listener.GetContext();
+                        ProcessRequest(context);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine($"Error: \"{ex.Message}\".");
+                    }
                 }
             }
-            /*            }
-                        catch (Exception ex)
-                        {
-                            Console.ForegroundColor = ConsoleColor.Red;
-                            Console.WriteLine($"Fatal Error: \"{ex.Message}\".");
-                        }
-            */
+            catch (Exception ex)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine($"Fatal Error: \"{ex.Message}\".");
+            }
         }
         public static void ProcessRequest(HttpListenerContext context)
         {
